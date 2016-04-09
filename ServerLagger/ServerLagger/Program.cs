@@ -20,10 +20,10 @@
 
             var laggermenu = new Menu("Lagger 1", "Lagger");
             Menu.AddItem(new MenuItem("Lagger.Enable", "Enable lagger").SetValue(false)).DontSave();
-            Menu.AddItem(new MenuItem("Lagger.Count", "Count").SetValue(new Slider(5000, 1, 100000))).DontSave();
-            Menu.AddItem(new MenuItem("Lagger.Delay", "Delay").SetValue(new Slider(100, 1, 10000))).DontSave();
-            Menu.AddItem(new MenuItem("Lagger.CMD", "CMD").SetValue(new StringList(new[] { "god", "explode", "kill" }, 0))).DontSave();
-
+            Menu.AddItem(new MenuItem("Lagger.Count", "Count").SetValue(new Slider(4000, 1, 50000))).DontSave();
+            Menu.AddItem(new MenuItem("Lagger.Delay", "Delay").SetValue(new Slider(100, 1, 1000))).DontSave();
+            Menu.AddItem(new MenuItem("Lagger.CMD", "CMD").SetValue(new StringList(new[] { "god", "kill", "explode" }, 0))).DontSave();
+             
             Menu.AddToMainMenu();
             Game.OnUpdate += Game_OnUpdate;
             Thread myThread = new Thread(func);
@@ -57,6 +57,7 @@
             if (!Game.IsInGame || _me == null)
             {
                 _loaded = false;
+                Menu.Item("Lagger.Enable").SetValue(false);
                 Console.WriteLine("> LAGGER Unloaded");
                 return;
             }
@@ -86,3 +87,4 @@
         }
     }
 }
+
