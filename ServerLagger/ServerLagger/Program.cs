@@ -1,6 +1,4 @@
-﻿// By imaddy
-
-namespace ServerLagger
+﻿namespace ServerLagger
 {
     using System;
     using System.Collections.Generic;
@@ -16,16 +14,15 @@ namespace ServerLagger
     {
         private static bool _loaded;
         private static Hero _me;
-        private static Player _player;
         private static readonly Menu Menu = new Menu("LAGGER", "LG", true);
         private static void Main()
         {
 
             var laggermenu = new Menu("Lagger 1", "Lagger");
             Menu.AddItem(new MenuItem("Lagger.Enable", "Enable lagger").SetValue(false)).DontSave();
-            Menu.AddItem(new MenuItem("Lagger.Count", "Count").SetValue(new Slider(30000, 1, 200000))).DontSave();
-            Menu.AddItem(new MenuItem("Lagger.Delay", "Delay").SetValue(new Slider(1000, 30, 5000))).DontSave();
-
+            Menu.AddItem(new MenuItem("Lagger.Count", "Count").SetValue(new Slider(5000, 1, 100000))).DontSave();
+            Menu.AddItem(new MenuItem("Lagger.Delay", "Delay").SetValue(new Slider(100, 1, 10000))).DontSave();
+            Menu.AddItem(new MenuItem("Lagger.CMD", "CMD").SetValue(new StringList(new[] { "god", "explode", "kill" }, 0))).DontSave();
 
             Menu.AddToMainMenu();
             Game.OnUpdate += Game_OnUpdate;
@@ -38,16 +35,15 @@ namespace ServerLagger
             if (!_loaded)
             {
                 _me = ObjectMgr.LocalHero;
-                _player = ObjectMgr.LocalPlayer;
                 if (!Game.IsInGame || _me == null)
                 {
                     return;
                 }
                 // sv_cheats анлок на всякий случай
                 var list = new Dictionary<string, int>
-                               {
-                                   { "sv_cheats", 1 }
-                               };
+                {
+                    { "sv_cheats", 1 }
+                };
                 foreach (var data in list)
                 {
                     var var = Game.GetConsoleVar(data.Key);
@@ -79,9 +75,10 @@ namespace ServerLagger
 
                     var count = Menu.Item("Lagger.Count").GetValue<Slider>().Value;
                     var delay = Menu.Item("Lagger.Delay").GetValue<Slider>().Value;
+                    string str = Menu.Item("Lagger.CMD").GetValue<StringList>().SelectedValue;
 
                     for (var i = 0; i < count; i++)
-                        Game.ExecuteCommand("kill");
+                        Game.ExecuteCommand(str);
 
                     Utils.Sleep(delay, "update");
                 }
